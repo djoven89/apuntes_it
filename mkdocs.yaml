@@ -1,0 +1,77 @@
+---
+#####
+## Plantilla base
+#####
+
+site_author: Daniel Joven
+site_name: Apuntes IT
+site_url: https://apuntes.learning.djoven.es
+repo_url: https://github.com/djoven89/apuntes_it
+docs_dir: 'docs/'
+site_dir: 'generated/'
+
+nav:
+  - Home: 'home.md'
+  - Apuntes AWS:
+    - Lambda: 'aws/lambda.md'
+  - About me: 'about.md'
+
+## https://squidfunk.github.io/mkdocs-material/reference/code-blocks/#configuration
+
+theme:
+  name: material
+  # custom_dir: '../../overrides/'                  # This is where the customization of the theme lives
+  # logo: assets/images/logo.png                    # The logo is shared by all languages
+  favicon: assets/favicon.ico              # The favicon is shared by all languages
+  features:
+    - navigation.tracking
+    - navigation.tabs
+    - navigation.sections
+    - navigation.expand
+    - navigation.indexes
+    - toc.integrate
+    - content.code.copy
+    - content.code.annotate
+    - navigation.top
+  palette:
+    # Palette toggle for light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      accent: red
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+        accent: indigo
+
+    # Palette toggle for dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      accent: red
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  font:
+    text: Roboto
+    code: Roboto Mono
+  icon:
+    repo: fontawesome/brands/github
+
+# plugins:
+#   ## https://squidfunk.github.io/mkdocs-material/setup/adding-a-git-repository/
+#   - git-revision-date-localized:
+#       enable_creation_date: true
+#       type: date
+#   ## https://github.com/blueswen/mkdocs-glightbox
+#   - glightbox:
+
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
+  - admonition
+  - toc:
+      permalink: true
+
+...
