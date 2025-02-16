@@ -1,0 +1,896 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+        <meta name="author" content="Daniel Joven">
+      
+      
+        <link rel="canonical" href="https://apuntes.learning.djoven.es/aws/api-gateway/">
+      
+      
+        <link rel="prev" href="../lambda/">
+      
+      
+        <link rel="next" href="../asg/">
+      
+      
+      <link rel="icon" href="../../assets/favicon.ico">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.4">
+    
+    
+      
+        <title>API Gateway - Apuntes IT</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.8608ea7d.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="red">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#amazon-api-gateway" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Apuntes IT" class="md-header__button md-logo" aria-label="Apuntes IT" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Apuntes IT
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              API Gateway
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="red"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="red"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/djoven89/apuntes_it" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8M97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../lambda/" class="md-tabs__link">
+        
+  
+    
+  
+  Lambda
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+    
+  
+  
+    <li class="md-tabs__item md-tabs__item--active">
+      <a href="./" class="md-tabs__link">
+        
+  
+    
+  
+  API Gateway
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../asg/" class="md-tabs__link">
+        
+  
+    
+  
+  Auto Scaling Group
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Apuntes IT" class="md-nav__button md-logo" aria-label="Apuntes IT" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Apuntes IT
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/djoven89/apuntes_it" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8M97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Home
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lambda/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Lambda
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    API Gateway
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    API Gateway
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#caracteristicas-principales" class="md-nav__link">
+    <span class="md-ellipsis">
+      Características principales
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#terminologia-y-conceptos" class="md-nav__link">
+    <span class="md-ellipsis">
+      Terminología y conceptos
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#http-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      HTTP API
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rest-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      REST API
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="REST API">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#deployments" class="md-nav__link">
+    <span class="md-ellipsis">
+      Deployments
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#monitoring" class="md-nav__link">
+    <span class="md-ellipsis">
+      Monitoring
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#websocket-apis" class="md-nav__link">
+    <span class="md-ellipsis">
+      WebSocket APIs
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../asg/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Auto Scaling Group
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="amazon-api-gateway">Amazon API Gateway<a class="headerlink" href="#amazon-api-gateway" title="Permanent link">&para;</a></h1>
+<p>Es un servicio gestionado que hace sencillo para los desarrolladores publicar, mantener, monitorizar y securizar API.</p>
+<h2 id="caracteristicas-principales">Características principales<a class="headerlink" href="#caracteristicas-principales" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Los tipo de APIs que podemos configurar son:<ul>
+<li>REST</li>
+<li>HTTP</li>
+<li>WebSocket</li>
+</ul>
+</li>
+<li>Las funcionalidades que ofrece el servicio son:<ul>
+<li>WebSocket (stateful).</li>
+<li>HTTP y REST (stateless)</li>
+<li>Autenticación flexible con servicios como:<ul>
+<li>IAM</li>
+<li>Lambda authorized functions</li>
+<li>Amazon Cognito</li>
+</ul>
+</li>
+<li>Despliegues de tipo <code>canary</code> para Rest API.</li>
+</ul>
+</li>
+<li>El servicio puede integrar con:<ul>
+<li>Amazon CloudTrail</li>
+<li>Amazon CloudWatch</li>
+<li>AWS WAF</li>
+<li>AWS X-RAY</li>
+</ul>
+</li>
+<li>Es posible crear un <code>Mock integration</code> en una REST API.</li>
+<li>Para elegir entre una API REST o HTTP, tenemos <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-vs-rest.html">este</a> enlace donde nos explica las funcionalidades disponibles.</li>
+</ul>
+<h2 id="terminologia-y-conceptos">Terminología y conceptos<a class="headerlink" href="#terminologia-y-conceptos" title="Permanent link">&para;</a></h2>
+<ul>
+<li><code>API method</code>: Combinación de la ruta de un recurso con el verbo HTTP, por ejemplo:<ul>
+<li><code>POST /incomes</code></li>
+<li><code>GET /expenses</code></li>
+</ul>
+</li>
+<li><code>API stage</code>: Referencia lógica a un ciclo de vida de la API. Es decir, el entorno (prod, staging, etc).</li>
+<li><code>Developer portal</code>: Aplicación que permite a los clientes registrar, descubrir y suscribirse a la API, además de gestionar sus API keys y visitar las métricas de uso.</li>
+</ul>
+<h2 id="http-api">HTTP API<a class="headerlink" href="#http-api" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Es una RESTful API.</li>
+<li>HTTP API está diseñada con menos funcionalidades para tener un precio más bajo.</li>
+<li>Comparación entre REST API y HTTP API <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-vs-rest.html">aquí</a>.</li>
+<li>Funcionalidades principales:<ul>
+<li>Es posible enviar las request a AWS Lambda o a cualquier HTTP endpoint.</li>
+<li>Autenticación con OpenID Connect y OAuth 2.0.</li>
+<li><a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-cors.html">CORS</a>.</li>
+<li>Despliegues automáticos.</li>
+</ul>
+</li>
+<li>Para crear una API sencilla se necesitan configurar lo siguiente como mínimo:<ul>
+<li>Una ruta.</li>
+<li>Una integración.</li>
+<li>Un stage.</li>
+<li>Un deployment.</li>
+</ul>
+</li>
+<li><code>Workflow de una request</code>:<ol>
+<li>El cliente envía una API request.</li>
+<li>API Gateway determina a que <code>stage</code> debe enruta la petición.<ul>
+<li>Si se hace match con un stage, se enruta a éste la request, sino irá a <code>$default</code>, en caso de no existir, devuelve un <code>{"message":"Not Found"}</code> sin generar registros en CloudWatch Logs.</li>
+</ul>
+</li>
+<li>Una vez que el stage fue seleccionado, API Gateway selecciona la route.<ul>
+<li>La selección se hace por el match más específico, usando las siguientes prioridades.<ol>
+<li>Match completo de route y method.</li>
+<li>Greedy path variable.</li>
+<li>$default.</li>
+</ol>
+</li>
+</ul>
+</li>
+<li>En caso de no haber match, se devuelve un <code>{"message":"Not Found"}</code> al cliente.</li>
+</ol>
+</li>
+<li><code>Routes</code><ul>
+<li>Enruta las API requests a un backend.</li>
+<li>Conta de dos partes:<ul>
+<li>HTTP method.</li>
+<li>Es posible usar <code>ANY</code> para hacer match de todos los métodos no definidos en el resource.</li>
+<li>Podemos usar <code>$default</code> para actuar como <strong>catch-all</strong> para todas las requests que no hagan match en otros routes.</li>
+<li>Resource path.</li>
+<li>Es posible usar variables. <code>GET /pets/{petID}</code>.</li>
+<li>A <strong>greedy path variable</strong> catches all child resources of a route.<ul>
+<li>Debe añadirse un <code>+</code> al final de la variable: <code>{proxy+}</code>.</li>
+<li>Debe estar siempre al final del path del resource.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>API Gateway decodifica los request parameters de la URL antes de pasárselos a la integración del backend.</li>
+<li>Por defecto, los query strings son enviados a la integración del backend si están incluidos en la request.</li>
+</ul>
+</li>
+<li><code>Access control</code><ul>
+<li>Hay tres mecanismos para controlar y gestionar el acceso a la HTTP API:<ul>
+<li><strong>Lambda authorizers</strong></li>
+<li>Cuando un cliente hace una API requests, API Gateway invoca una función Lambda. Dependiendo de la respuesta, el cliente podrá o no acceder a la API.</li>
+<li>En caso de no usar la consola de AWS; habrá que indicar la versión del payload soportada (1.0 ó 2.0).</li>
+<li>Opcionalmente, se pueden establecer <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-lambda-authorizer.html#http-api-lambda-authorizer.identity-sources">identity sources</a> para la autorización de Lambda, de modo que si el cliente no los proporciona en la requests, API Gateway le devolverá un <strong>401</strong> sin llegar siquiera a invocar la función.<ul>
+<li>Headers.</li>
+<li>Query string.</li>
+<li>Context.</li>
+<li>Stage.</li>
+</ul>
+</li>
+<li>Es posible cachear la autorización.</li>
+</ul>
+</li>
+<li><strong>JWT authorizers</strong><ul>
+<li>Es posible usar JWT como parte de OIDC y OAuth 2.0 para restringir el acceso a la API.</li>
+<li>Cuando un cliente hace una API request, API Gateway valida el JWT enviado por el cliente. y determina si puede acceder a la API basándose en la validación del token y opcionalmente, en el scope del token.</li>
+<li>API Gateway enviará el <strong>claim</strong> en el token a la integración de la ruta en cuestión.</li>
+</ul>
+</li>
+<li><strong>Standard AWS IAM roles and policies</strong><ul>
+<li>El cliente deberá firmar la request con <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_sigv-create-signed-request.html">SigV4</a>.</li>
+<li>Será necesario que se disponga del permiso <code>execute-api</code> en la ruta para que API Gateway se invoque.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>Integrations</code><ul>
+<li>Permite conectar un route a recursos backend.</li>
+<li>Soporta:</li>
+<li><strong>Lambda proxy</strong><ul>
+<li>En caso de no usar la consola de AWS; habrá que indicar la versión del payload soportada (1.0 ó 2.0).</li>
+</ul>
+</li>
+<li><strong>AWS service</strong><ul>
+<li>Es posible integrar uno de <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-develop-integrations-aws-services-reference.html">estos servicios</a> de AWS usando first-class integrations.</li>
+</ul>
+</li>
+<li><strong>HTTP proxy integrations</strong><ul>
+<li>Permite establecer un endpoint HTTP público.</li>
+<li>API Gateway envía toda la request y la respuesta.</li>
+</ul>
+</li>
+<li><strong>Private integrations</strong><ul>
+<li>Se integra con recursos privados de una VPC, que son:</li>
+<li>ELB</li>
+<li>ECS</li>
+<li>AWS Cloud Map service.</li>
+<li>Es necesario crear un <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-vpc-links.html">VPC link</a> para usar esta funcionalidad.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Mediante <strong>parameter mapping</strong> podemos modificar la request ya sea por parte del clientes antes de enviarla a la integración o la respuesta procedente de la integración antes de enviársela al cliente.<ul>
+<li><strong>Headers</strong>, <strong>Query strings</strong> y el <strong>path</strong>, son los parámetros que podemos modificar antes de enviar a la integración.</li>
+<li><strong>Headers</strong> y <strong>Status code</strong> son los parámetros que podemos modificar de la respuesta de la integración antes de enviarla al cliente.</li>
+<li><a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-parameter-mapping.html#http-api-mapping-reserved-headers">Estas headers</a> están reservadas, por lo que no podremos modificarlas.</li>
+</ul>
+</li>
+<li>Podemos definir nuestra HTTP API mediante la importación de un archivo OpenAPI 3.0.</li>
+<li>Podemos migrar una API REST a una HTTP API mediante la exportación de la API REST como OpenAPI 3.0.</li>
+<li>Por defecto, es posible crear una API aún con errores en la estructura del archivo. Es posible modificar este valor.</li>
+<li><code>Stage</code><ul>
+<li>Referencia lógica a un ciclo de estado (dev, prod, v1, v2).</li>
+<li>Podemos usar stages o custom domain names para publicar la API.</li>
+<li>Es posible configurar integraciones y configuraciones distinta a cada stage.</li>
+<li>Podemos definir variables a un stage, las cuales actuarían como variables de entorno.<ul>
+<li>No deben contener información sensible como credenciales.</li>
+</ul>
+</li>
+<li>Si queremos usar un dominio custom, tendremos que usar <strong>API mapping</strong> para conectar la API stage con el dominio.<ul>
+<li>Es posible usar el mismo map para HTTP y REST APIs stages de un mismo dominio custom.</li>
+<li>Si queremos que los clientes sólo puedan usar la API bajo el dominio custom, habrá que deshabilitar el endpoint <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-disable-default-endpoint.html">execute-api</a>.</li>
+</ul>
+</li>
+<li>Para enviar información sensible a las integraciones, usar <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-lambda-authorizer.html#http-api-lambda-authorizer.payload-format-response">AWS Lambda authorized</a> (usar el output de la función Lambda para enviar la información sensible a las integraciones).</li>
+<li>En caso de necesitar establecer cookies con información sensible, es recomendable usar cookies con el prefijoo <code>__Host-</code> tal y como se comenta <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-publish.html">aquí</a>.</li>
+</ul>
+</li>
+<li>Podemos configurar la API con <strong>throttling</strong> para protegernos de recibir demasiadas requests.<ul>
+<li>API Gateway isa el algoritmo <strong>token bucket</strong>, se examina el rate y el burst of requests contra todas las APIs de una <strong>región</strong>.</li>
+<li>Cuando las solicitudes superan los límites, el cliente recibe un <strong>429 Too Many Requests</strong>.</li>
+<li>Es posible configurarlo a nivel de API stage o a nivel de routes.</li>
+<li>A nivel de cuenta hay una quota que limita esta funcionalidad para protegernos de posibles ataques.</li>
+<li>Los valores son por segundo y son dos conceptos:<ul>
+<li><strong>Burst limit</strong></li>
+<li>Tamaño del bucket.</li>
+<li>Número de peticiones concurrentes por segundo.</li>
+<li><strong>Rate limit</strong></li>
+<li>Número de peticiones por segundo.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Podemos configurar <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-mutual-tls.html">mutual TLS authentication</a>, es decir, el cliente debe presentar un certificado X.509 para verificar el acceso a la API.<ul>
+<li>Se usa para IoT y aplicaciones business-to-business.</li>
+</ul>
+</li>
+<li>Podemos usar Amazon CloudWatch metrics y Logs para monitorizar la API.<ul>
+<li>Es posible que <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-monitor.html">estos casos</a> no sean registrados en Amazon CloudWatch.</li>
+<li>Por defecto, las métricas se envían cada minuto.</li>
+<li>Las métricas se almacenan durante 15 meses.</li>
+<li><a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-metrics.html">Estas</a> son las métricas disponibles.</li>
+<li>Es posible personalizar el access log con <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-logging-variables.html">estas variables</a>.</li>
+</ul>
+</li>
+</ul>
+<h2 id="rest-api">REST API<a class="headerlink" href="#rest-api" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Colección de recursos y métodos que se integran con un backend de tipo:<ul>
+<li>HTTP endpoint.</li>
+<li>Lambda functions.</li>
+<li>Otros servicios de AWS.</li>
+</ul>
+</li>
+<li>El servicio interactúa con los backend a través de <code>integration requests</code> y <code>integration responses</code>.</li>
+<li>El frontend es encapsulado en <code>method requests</code> y <code>method responses</code>.</li>
+<li>Permite generar la documentación de la API con <code>API Gateway extensions to OpenAPI</code>.</li>
+<li>El módulo que usa este tipo de API es request/response, es decir, el cliente envía una petición a un servicio y el servicio response de forma sincronizada.</li>
+<li>Construimos una REST API como una colección de entidades programables llamadas <code>API Gateway Resources</code>.</li>
+<li>Cada entidad <code>Resource</code> tiene uno o más <code>Methods resources</code>.<ul>
+<li>Un <code>Method resource</code> es una petición entrante de un cliente que es expresada con parámetros y un body.</li>
+</ul>
+</li>
+<li>Para integrar un <code>method resource</code> con un backend endpoint (llamado <code>Integration endpoint</code>), creamos un <code>Integration resource</code>.<ul>
+<li>Permite enrutar la petición del cliente a un integration endpoint concreto.  -</li>
+</ul>
+</li>
+<li>Es posible transformar el parámetro o el body recibido para cumplir con los requisitos del backend.</li>
+<li>Para las respuestas, se crea un <code>Method response</code>, que representa la respuesta recibida del cliente.</li>
+<li>Para representar la respuesta del backend se crea un <code>Integration Response</code>.</li>
+<li>Es posible transformar los datos de la respuesta del backend antes de enviarlos al cliente.</li>
+<li>Para controlar quien puede consultar la API, podemos usar:<ul>
+<li>IAM.</li>
+<li>Lambda authorized.</li>
+<li>Amazon Cognito user pool.</li>
+</ul>
+</li>
+<li>Para medir y limitar el uso de la API, podemos usar <code>usage plans</code>.</li>
+<li>El <code>API endpoint type</code> (hostname), puede ser de varios tipos:</li>
+<li><code>Edge-optimized</code>
+        * Default.
+        * Enruta las peticiones al POP de CloudFront más cercano a la ubicación geográfica del cliente.
+        * El nombre de los HTTP headers se establecen en mayúsculas.
+        * Los custom domain name se aplican a todas las regiones.<ul>
+<li><code>Regional</code><ul>
+<li>El uso es para clientes que están en la misma región (EC2 como cliente y API gateway en la misma región). También cuando tenemos pocos clientes pero con gran demanda.</li>
+<li>Los custom domain name son específicos de una región.</li>
+<li>Es posible integrar los custom domain con Amazon Route 53 para habilitar la funcionalidad <a href="https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy.html#routing-policy-latency">latency-based routing</a>.</li>
+</ul>
+</li>
+<li><code>Private</code><ul>
+<li>Sólo puede accederse al API endpoint desde una VPC.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Es posible cambiar el tipo de API endpoint, <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-api-migration.html">aquí</a> se explican las combinaciones.</li>
+<li>Al configurar el <code>API method</code> indicamos qué debería o debe enviar un cliente en su respuesta al backend, además, definimos las respuestas al cliente.<ul>
+<li>Es una petición HTTP, con su verbo HTTP, el path al recurso, headers y query strings.</li>
+<li>Deberíamos configurar un payload cuando usamos <code>POST</code>, <code>PUT</code> o <code>PATCH</code>.</li>
+</ul>
+</li>
+<li>Como <code>Method request</code> (input de la request), es posible elegir entre parámetros o payload.</li>
+<li>Como <code>Method response</code> (output), determinamos el STATUS code, headers y el body antes de enviarlo al cliente.</li>
+<li>Si no tenemos un proxy integrado, deberemos configurar los <code>method responses</code>.<ul>
+<li>Típicamente, las respuestas son 2XX, 4XX o 5XX.</li>
+<li>Es común establecer 500 como respuesta por defecto para excepciones.</li>
+</ul>
+</li>
+</ul>
+<p>https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-method-settings-method-request.html</p>
+<h3 id="deployments">Deployments<a class="headerlink" href="#deployments" title="Permanent link">&para;</a></h3>
+<ul>
+<li>https://docs.aws.amazon.com/apigateway/latest/developerguide/rest-api-publish.html</li>
+</ul>
+<h3 id="monitoring">Monitoring<a class="headerlink" href="#monitoring" title="Permanent link">&para;</a></h3>
+<h2 id="websocket-apis">WebSocket APIs<a class="headerlink" href="#websocket-apis" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Tanto el cliente como el servidor pueden enviarse mensajes simultáneamente.</li>
+<li>El uso típico de este tipo de APIs es:<ul>
+<li>Chats.</li>
+<li>Dashboards a tiempo real.</li>
+<li>Alertas y notificaciones a tiempo real.</li>
+</ul>
+</li>
+<li>El servicio permite:<ul>
+<li>Monitorización y limitación de conexiones y mensajes</li>
+<li>Traceo de mensajes hacía los backends con AWS X-RAY.</li>
+<li>Fácil integración con endpoints HTTP/HTTPS</li>
+</ul>
+</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.tracking", "navigation.tabs", "navigation.sections", "navigation.expand", "navigation.indexes", "toc.integrate", "content.code.copy", "content.code.annotate", "navigation.top"], "search": "../../assets/javascripts/workers/search.f8cc74c7.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.f1b6f286.min.js"></script>
+      
+    
+  </body>
+</html>

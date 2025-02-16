@@ -1,0 +1,1347 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+        <meta name="author" content="Daniel Joven">
+      
+      
+        <link rel="canonical" href="https://apuntes.learning.djoven.es/aws/asg/">
+      
+      
+        <link rel="prev" href="../api-gateway/">
+      
+      
+      
+      <link rel="icon" href="../../assets/favicon.ico">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.4">
+    
+    
+      
+        <title>Auto Scaling Group - Apuntes IT</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.8608ea7d.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="red">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#amazon-ec2-auto-scaling-group" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Apuntes IT" class="md-header__button md-logo" aria-label="Apuntes IT" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Apuntes IT
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Auto Scaling Group
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="red"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="red"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/djoven89/apuntes_it" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8M97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../lambda/" class="md-tabs__link">
+        
+  
+    
+  
+  Lambda
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../api-gateway/" class="md-tabs__link">
+        
+  
+    
+  
+  API Gateway
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+    
+  
+  
+    <li class="md-tabs__item md-tabs__item--active">
+      <a href="./" class="md-tabs__link">
+        
+  
+    
+  
+  Auto Scaling Group
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Apuntes IT" class="md-nav__button md-logo" aria-label="Apuntes IT" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Apuntes IT
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/djoven89/apuntes_it" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8M97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Home
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lambda/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Lambda
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api-gateway/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    API Gateway
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Auto Scaling Group
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Auto Scaling Group
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#caracteristicas-principales" class="md-nav__link">
+    <span class="md-ellipsis">
+      Características principales
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#general" class="md-nav__link">
+    <span class="md-ellipsis">
+      General
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#funcionalidades" class="md-nav__link">
+    <span class="md-ellipsis">
+      Funcionalidades
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#lifecycle" class="md-nav__link">
+    <span class="md-ellipsis">
+      Lifecycle
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#launch-template" class="md-nav__link">
+    <span class="md-ellipsis">
+      Launch template
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#health-checks" class="md-nav__link">
+    <span class="md-ellipsis">
+      Health checks
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#instance-maintenance" class="md-nav__link">
+    <span class="md-ellipsis">
+      Instance maintenance
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#instance-standby" class="md-nav__link">
+    <span class="md-ellipsis">
+      Instance standby
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#instance-refresh" class="md-nav__link">
+    <span class="md-ellipsis">
+      Instance refresh
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hooks" class="md-nav__link">
+    <span class="md-ellipsis">
+      Hooks
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#asg-con-mixed-instances-group" class="md-nav__link">
+    <span class="md-ellipsis">
+      ASG con Mixed instances group
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#spot-instances" class="md-nav__link">
+    <span class="md-ellipsis">
+      Spot instances
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#instance-warmup" class="md-nav__link">
+    <span class="md-ellipsis">
+      Instance warmup
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#warm-pool" class="md-nav__link">
+    <span class="md-ellipsis">
+      Warm pool
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#integracion-elb" class="md-nav__link">
+    <span class="md-ellipsis">
+      Integración ELB
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#politicas-de-escalado" class="md-nav__link">
+    <span class="md-ellipsis">
+      Políticas de escalado
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Políticas de escalado">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#maintain-a-fixed-number-of-instances" class="md-nav__link">
+    <span class="md-ellipsis">
+      Maintain a fixed number of instances
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#scale-manually" class="md-nav__link">
+    <span class="md-ellipsis">
+      Scale manually
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#scale-based-on-schedule" class="md-nav__link">
+    <span class="md-ellipsis">
+      Scale based on schedule
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#scale-based-on-demand-dynamic" class="md-nav__link">
+    <span class="md-ellipsis">
+      Scale based on demand (dynamic)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#use-predictive-scaling" class="md-nav__link">
+    <span class="md-ellipsis">
+      Use predictive scaling
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="amazon-ec2-auto-scaling-group">Amazon EC2 Auto Scaling Group<a class="headerlink" href="#amazon-ec2-auto-scaling-group" title="Permanent link">&para;</a></h1>
+<h2 id="caracteristicas-principales">Características principales<a class="headerlink" href="#caracteristicas-principales" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Colección de instancias EC2 controladas por el servicio que permite gestionar el número de EC2 en función de la carga que tenga la aplicación.</li>
+<li>Mediante políticas podemos definir cuándo se escalarán o desescalarán instancias EC2.</li>
+<li>Cuando actualizamos el ASG como por ejemplo, la launch template, las instancias en ejecución no obtendrán los cambios.</li>
+<li>Es posible actualizar - reemplazar - una instancia usando instance refresh.</li>
+<li>Podemos actualizar manualmente una instancia sin necesidad de tener que eliminarla de varias maneras:<ul>
+<li>Poner la instancia en modo standby.</li>
+<li>Sacarla temporalmente del ASG y luego volver a unir.</li>
+</ul>
+</li>
+<li>Podemos hacer uso de rollbacks y checkpoints en caso de actualizar las instancias en ejecución usando instance refresh.</li>
+<li>Podemos obtener el ID de la AMI mediante Amazon Systems Manager Parameter Store, aunque nos impedirá el uso de otras funcionalidades como el rollback.</li>
+<li>Mediante <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/ec2-auto-scaling-zonal-shift.html">Amazon Application Recovery Controller</a> para mover las instancias de una región con incidencias a otra.</li>
+<li>Es posible integrar el ASG con otros servicios como un ELB.</li>
+<li>Mediante instance maintenance policy es posible indicar cómo se irán creando y reemplazando las instancias.</li>
+<li>Para controlar cuando una instancia está lista para gestionar peticiones, tenemos:<ul>
+<li>Health checks</li>
+<li>Instance warmup</li>
+</ul>
+</li>
+<li>Es posible crear hooks para que se ejecuten cuando una instancia está en un estado concreto.</li>
+<li>Podemos usar Spot instance e indicar un porcentaje de instancias on-demand y spot que deseamos tener en nuestro ASG.</li>
+<li>Es posible usar distintos tipos de instancia en un mismo ASG, pudiendo dejar al propio ASG quien seleccione un tipo u otro o configurándolo nosotros manualmente.</li>
+<li>En caso de que nuestras instancias tarden bastante en iniciar, podemos hacer uso de warm pools para reducir drásticamente esos tiempos.</li>
+</ul>
+<h2 id="general">General<a class="headerlink" href="#general" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Esta funcionalidad permite tener un número determinado de instancias EC2 para gestionar la carga de la aplicación según la demanda que tenga.</li>
+<li>Auto Scaling groups es una colección de instancias EC2.</li>
+<li>Se establece un número mínimo y máximo de instancias EC2 a desplegar. Además, es posible definir un <code>desired capacity</code> y ASG tratará de levantar las instancias.<ul>
+<li><img alt="Tamaño" src="../imgs/asg/asg-size.png" /></li>
+<li><a href="https://docs.aws.amazon.com/images/autoscaling/ec2/userguide/images/asg-basic-arch.png">Imagen</a> explicativa del concepto.</li>
+</ul>
+</li>
+<li>Si se especifican <code>scaling policies</code>, ASG levantará y terminará instancias según la demanda se incremente o reduzca.</li>
+<li>Podemos actualizar una instancia a modo de 'canary deployment' o incluso, ponerla en standby, lo que hará que no esté activa para los clientes, aunque podremos hacer troubleshooting en ella, hacer ajustes y luego, volver a ponerla en servicio.</li>
+<li>Podemos desplegar instancias on-demand y spot, incluso a la vez en el mismo ASG.</li>
+<li>Podemos usar distintos tipos de instancias y de opciones de compra en un mismo ASG.</li>
+<li>No es recomendable usar <strong>$Latest</strong> o <strong>$Default</strong> como valor a la hora de elegir la launch template, dado que habrá funcionalidades como rollback o skip matching que no estarán disponibles o que reemplazarán las instancias más veces de las deseadas.</li>
+<li>La funcionalidad <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/ec2-auto-scaling-quotas.html">estas quotas</a> aplicadas.</li>
+<li>Es posible desasociar una instancia del ASG y opcionalmente, volverla a incluir después.<ul>
+<li>Se recomienda ponerlas en modo <strong>standby</strong>.</li>
+<li>En caso de no ajustar el <strong>desired capacity</strong>, ASG levantará otra instancia.</li>
+<li>Sólo se puede hacer cuando están en estado <strong>InService</strong>.</li>
+</ul>
+</li>
+<li>Hay ciertos requisitos a cumplir para unir una instancia auto-gestionada al ASG.<ul>
+<li>Debe estar <strong>RUNNING</strong>.</li>
+<li>Su AMI debe existir.</li>
+<li>Debe estar alojada en la misma región.</li>
+<li>La AZ debe ser parte del ASG.</li>
+</ul>
+</li>
+<li>Podemos usar <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/ec2-auto-scaling-zonal-shift.html">Amazon Application Recovery Controller</a> para mover las instancias de una región con incidencias a otra.</li>
+<li>Las estrategias de AZ para el ASG son:<ul>
+<li><strong>Balanced best effort</strong><ul>
+<li>ASG mantiene un número igual de instancias entre las AZs.</li>
+<li>Si un launch falla en una AZ, ASG intentará crear la instancia en otra AZ.</li>
+</ul>
+</li>
+<li><strong>Balanced only</strong><ul>
+<li>Si un launch falla en una AZ, ASG seguirá tratando de crear la instancia en la misma AZ.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Respecto a una instancia terminada:<ul>
+<li>Si tenía una EIP asociada, está no será eliminada del pool, por lo que si queremos usarla en otra instancia o eliminarla del pool, habrá que usar un hook.</li>
+<li>Los volúmenes EBS asociado serán eliminados si dicha opción está definida, sino simplemente estarán disponibles pero sin usar.</li>
+</ul>
+</li>
+<li>Es posible establecer establecer un periodo de vida máximo de una instancia.<ul>
+<li>Nos permite ir reemplazando instancias periódicamente reduciendo la necesidad de usar <strong>instance refresh</strong>.</li>
+<li>No es recomendable establecer valores cortos, dado que puede verse afectado nuestro <strong>desired capacity</strong> y por ende la disponibilidad de la aplicación.</li>
+<li>Podemos usar la opción <strong>Instance scale-in protection</strong> para garantizar que ciertas instancias no son eliminadas incluso si llegó el fin de la vida establecida.</li>
+<li>Es importante definir una <strong>instance maintenance policy</strong> para tener el mayor control posible sobre como se escala y desescala.</li>
+</ul>
+</li>
+</ul>
+<h2 id="funcionalidades">Funcionalidades<a class="headerlink" href="#funcionalidades" title="Permanent link">&para;</a></h2>
+<ul>
+<li><code>Monitorización del estado de las instancias</code><ul>
+<li>Monitoriza la salud de cada instancia, en caso de que los health checks fallen, la eliminará y creará una nueva.</li>
+</ul>
+</li>
+<li><code>Custom health checks</code></li>
+<li><code>Balanceo de la capacidad entre múltiples AZs</code><ul>
+<li>ASG trata de mantener un mismo número de instancias en cada AZ.</li>
+<li>En caso de que no haya un balance de instancias entre las AZs, ASG tratará de corregirlo de dos vías:<ul>
+<li><strong>Availability zone balancing</strong><ul>
+<li>Lanzará nuevas instancias antes de terminar las antiguas, de modo que no se reduzca el rendimiento.</li>
+<li>Es posible que se sobrepase la capacidad establecida hasta un 10%.</li>
+<li>Podemos definir <code>instance maintenance policies</code> para controlar nosotros mismos el rango entre otras cosas.</li>
+</ul>
+</li>
+<li><strong>Capacity Rebalancing</strong><ul>
+<li>Sólo es válido para instancias Spot.</li>
+<li>ASG tratará de crear nuevas instancias cuando se le reporte que una Spot instance tiene un elevado riesgo de interrupción.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>Múltiples tipos y 'purchase' en un mismo ASG</code><ul>
+<li>Es posible configurar instancias de tipo 'Spot' u 'On-Demand'.</li>
+<li>Podemos hacer uso de instancias reservadas o Saving plans en combinación con On-Demand.</li>
+</ul>
+</li>
+<li><code>Remplazo automático de Spot instances</code><ul>
+<li>Si se ven interrumpidas, ASG las remplazará</li>
+<li>A través del 'capacity rebalancing' monitoriza y reemplaza instancias de tipo Spot que tienen un porcentaje elevado de ser interrumpidas.</li>
+</ul>
+</li>
+<li><code>Load balancing</code><ul>
+<li>Se integra con el módulo de Elastic Load Balancing.</li>
+<li>ASG registra o desuscribe las instancias del ELB.</li>
+</ul>
+</li>
+<li><code>Scalability</code><ul>
+<li>A través de políticas es posible escalar o desescalar.</li>
+</ul>
+</li>
+<li><code>Instance refresh</code><ul>
+<li>Si el launch template sufre cambios, podemos usar ese mecanismo para actualizar la instancia.</li>
+<li>Se puede usar como un 'canary deployment', dado que permite modificar unas instancias y revisar el comportamiento antes de actualizar todo el scaling group.</li>
+</ul>
+</li>
+<li><code>Lifecycle hooks</code><ul>
+<li>Permite ejecutar acciones personalizadas ante eventos de creación de instancias o terminación.</li>
+</ul>
+</li>
+<li><code>Soporte para stateful workloads</code><ul>
+<li>Permite habilitar la protección <code>scale-in</code> o definir políticas custom de terminación para instancias de larga duración.</li>
+</ul>
+</li>
+</ul>
+<h2 id="lifecycle">Lifecycle<a class="headerlink" href="#lifecycle" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Ante ambos eventos, podremos ejecutar hooks.</li>
+<li><strong>Escalado</strong><ul>
+<li>Se produce ante los eventos:<ul>
+<li>Cambio manual del tamaño del ASG.</li>
+<li>Política de escalado.</li>
+<li>Escalado por programación (hora).</li>
+</ul>
+</li>
+<li>El diagrama tras producirse el evento es el siguiente:
+    <img alt="Scale Out" src="../imgs/asg/scale-out-diagram.png" /></li>
+<li>Las instancias permanecen en estado <code>InService</code> hasta que ocurre:<ul>
+<li>ASG decide terminar una instancia para reducir el tamaño.</li>
+<li>Establecemos la instancia en modo <code>Standby</code>.</li>
+<li>Detach de una instancia del ASG.</li>
+<li>Por fallos del health checks (se elimina y reemplaza).</li>
+</ul>
+</li>
+<li>Podemos asociar instancias al ASG, aunque éstas deberán de cumplir ciertos criterios.</li>
+</ul>
+</li>
+<li><strong>Desescalado</strong><ul>
+<li>Se produce ante los eventos:<ul>
+<li>Cambio manual del tamaño del ASG.</li>
+<li>Política de escalado.</li>
+<li>Escalado por programación (hora).</li>
+</ul>
+</li>
+<li>ASG puede terminar una o más instancias.</li>
+<li>En cuanto el estado de la instancia pase a <code>Terminating</code>, ya no será posible recuperarla.</li>
+<li>Se eliminará la vinculación con el ELB en caso de estar integrado.</li>
+<li>El diagrama tras producirse el evento es el siguiente:
+    <img alt="Scale IN" src="../imgs/asg/scale-in-diagram.png" /></li>
+<li>Podemos hacer un detach de la instancia, a partir de ese momento, la gestionaremos nosotros por separado del ASG.</li>
+</ul>
+</li>
+</ul>
+<h2 id="launch-template">Launch template<a class="headerlink" href="#launch-template" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Es el sustituto de <strong>launch configurations</strong>.</li>
+<li>Establece la configuración que tendrá la instancia EC2 al iniciarse.</li>
+<li>Cada actualización de la plantilla será una versión inmutable, lo que nos permitirá usar una versión concreta en el ASG.</li>
+<li>Todos los parámetros son opcionales, no obstante, un ASG no puede usarse sin una AMI, por lo que realmente, este sería el parámetro 'obligatorio' a definir.</li>
+<li>No se validan todos los parámetros, por lo que si hay algún tipo de incompatibilidad o error en las opciones definidas, la instancia no será iniciada.</li>
+<li>Es posible usar <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/using-systems-manager-parameters.html">Amazon Systems Manager Parameter Store</a> para obtener la AMI ID.<ul>
+<li>Tiene una serie de limitaciones importantes, las cuales se indican <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/using-systems-manager-parameters.html#using-systems-manager-parameters-limitations">aquí</a>.</li>
+</ul>
+</li>
+<li>Si la versión de la plantilla en el ASG, las nuevas instancias hará uso de la configuración establecida, no obstante, para las existentes tendremos las siguientes opciones:</li>
+<li>Usar <strong>instance refresh</strong>.</li>
+<li>Terminación manual de la instancia.</li>
+<li>Esperar a que ASG la termine por algún evento.</li>
+</ul>
+<h2 id="health-checks">Health checks<a class="headerlink" href="#health-checks" title="Permanent link">&para;</a></h2>
+<ul>
+<li>ASG recibe notificaciones del estado de una instancia de una o más <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/health-checks-overview.html#available-health-checks">fuentes</a>:<ul>
+<li><strong>Amazon EC2</strong><ul>
+<li>Default.</li>
+<li>Comprueba:<ol>
+<li>Los checks propios de la propia instancia EC2: <strong>instance status check</strong> y <strong>system status check</strong>.</li>
+<li>Si la instancia tiene un estado distinto a <strong>running</strong>.</li>
+</ol>
+</li>
+<li>Si la instancia tiene asociado un <strong>Schedule event</strong>, ASG reemplaza la instancia aunque no la termina hasta que la fecha del evento termina.</li>
+</ul>
+</li>
+<li><strong>Amazon EBS</strong><ul>
+<li>El volumen es alcanzable y pasa los checks I/O.</li>
+</ul>
+</li>
+<li><strong>Custom health checks</strong><ul>
+<li>Comprueba los checks definidos por nosotros mismos.</li>
+<li>Se configura un script en la instancia que dependiendo de las condiciones especificadas, se notificará a la API de ASG si la instancia está healthy o no.</li>
+<li><a href="https://aws.amazon.com/blogs/compute/how-to-create-custom-health-checks-for-your-amazon-ec2-auto-scaling-fleet/">Aquí</a> un ejemplo de configuración usando un hook.</li>
+</ul>
+</li>
+<li><strong>ELB</strong><ul>
+<li>Comprueba el reporte del health check definido en el propio ELB para la instancia.</li>
+</ul>
+</li>
+<li>VPC Lattice</li>
+</ul>
+</li>
+<li>Cuando una instancia em <code>InService</code> está en modo <strong>unhealthy</strong>, se reemplaza por una nueva para mantener en número de desired capacity del grupo.</li>
+<li>Es posible pausar temporalmente el proceso de autoscalado y poder debugear una incidencia evitando que se vayan creando y eliminando las instancias.<ul>
+<li>Los tipos de proceso que se pueden suspender están definidos <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-suspend-resume-processes.html#process-types">aquí</a> y <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/understand-how-suspending-processes-affects-other-processes.html">aquí</a> se describen como afecta al resto.</li>
+</ul>
+</li>
+<li>Es posible establecer un mínimo de segundos (grace period) para instancias nuevas antes de eliminarlas cuando han sido marcadas como unhealthy.<ul>
+<li>Esto es útil en caso de que la instancia todavía esté siendo iniciada y requiera de más tiempo para cumplir con los requisitos de los checks.</li>
+<li>Si se usan hooks para el despliegue de nuevas instancias, podemos dejar el valor a <strong>0</strong> dado que ASG usa otros métodos para garantizar que la instancia está iniciada.</li>
+<li>Esta valor se aplica a:<ul>
+<li>Lanzamiento de nuevas instancias.</li>
+<li>Instancias reactivadas tras estar en standby.</li>
+<li>Instancias asociadas manualmente.</li>
+</ul>
+</li>
+<li>Es altamente recomendable establacer un <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/ec2-auto-scaling-default-instance-warmup.html">warnup</a> a la instancia.</li>
+<li>Si se detecta que la instancia no está en estado <strong>running</strong> será marcada para su reemplazo.</li>
+</ul>
+</li>
+</ul>
+<h2 id="instance-maintenance">Instance maintenance<a class="headerlink" href="#instance-maintenance" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Es posible configurar políticas para que el ASG cumpla con ciertos requisitos ante eventos que causen un reemplazo de una instancia, los cuales son:<ul>
+<li>Instance refresh.</li>
+<li>Health checks failure</li>
+<li>Max instance lifetime.</li>
+<li>Rebalancing.</li>
+</ul>
+</li>
+<li>Un ejemplo sería que cuando haya una instancia unhealthy, se levante una nueva y hasta que no sea operativa, no se elimine la otra.</li>
+<li>También permite minimizar una posible pérdida de servicio cuando varias instancias se están reemplazando a la vez.</li>
+<li>Hay 3 políticas disponibles:<ul>
+<li><strong>Launch before terminating:</strong><ul>
+<li>Lanza una nueva instancia y cuando está operativa, elimina la anterior.</li>
+<li>HA sobre costes.</li>
+</ul>
+</li>
+<li><strong>Terminate and launch:</strong><ul>
+<li>Termine y lanza una instancia a la vez.</li>
+<li>Costes sobre HA.</li>
+</ul>
+</li>
+<li><strong>Custom:</strong><ul>
+<li>Permite definir un mínimo y máximo de capacidad cuando se produce un evento de reemplazo.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Por defecto, la funcionalidad está deshabilitada, usando <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/instance-maintenance-policy-overview-and-considerations.html">estas políticas</a>.</li>
+<li>Si se usa un <strong>warm pool</strong>, los min y max healthy percentages son aplicados separados al warm pool.</li>
+<li>No es necesario establecer el porcentaje para min y max de healthy en la funcionalidad <strong>instance refresh</strong> salvo que queramos sobreescribirlos.</li>
+</ul>
+<h2 id="instance-standby">Instance standby<a class="headerlink" href="#instance-standby" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Podemos modificar el estado de una instancia de <strong>InService</strong> a <strong>Standby</strong> para poder actualizarla o debugearla, y después, volver a ponerla en servicio.</li>
+<li>La instancia seguirá siendo parte del ASG pero no estará activa, ni siquiera para el ELB.</li>
+<li>Podemos indicar al ASG si queremos que mientras esté en este modo, se cree una nueva instancia o se reduzca el <strong>desired capacity</strong>.</li>
+<li>Al volver a incluir la instancia, el <strong>desired capacity</strong> se incrementa.</li>
+<li>Habrá que tener en cuenta la capacidad mínima y máxima del ASG.</li>
+<li>La instancia sigue generando costes aún en este estado.</li>
+<li>No se realizan health checks mientras esté en este estado.</li>
+</ul>
+<h2 id="instance-refresh">Instance refresh<a class="headerlink" href="#instance-refresh" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Permite actualizar una instancia del ASG.</li>
+<li>Se usa cuando hemos actualizado el ASG, como por ejemplo, el launch template y queremos que las instancias existentes obtengan dichos cambios.</li>
+<li>Este proceso elimina la instancia y crea otra en su lugar.</li>
+<li>Podremos seleccionar el porcentaje de instancias a reemplazar simultáneamente.<ul>
+<li>Si ya tenemos una <strong>instance maintenance policy</strong> no será necesario usar estos porcentajes salvo que queramos sobreescribirlos.</li>
+</ul>
+</li>
+<li>Salvo que tengamos la funcionalidad <strong>warmup</strong>, no es necesario establecer el <strong>instance warmup period</strong>.</li>
+<li>Antes de activar la funcionalidad, podemos establecer algunas preferencias que afectarán al proceso, las cuales se explican <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/understand-instance-refresh-default-values.html">aquí</a>.</li>
+<li>Habrá que tener en consideración si tenemos o vamos a integrar en la launch template a desplegar <strong>mixed instance policy</strong>, dado que es posible que se reemplacen las instancias Spot por On-demand o viceversa, dependiendo de si eliminamos esta funcionalidad o la añadimos.</li>
+<li>Mediante <strong>checkpoints</strong> podemos definir el porcentaje de instancias que serán reemplazadas a la vez en 'lotes', habiendo una pausa entre 'lotes', de modo que podamos verificar que todo va según lo planeado.<ul>
+<li>Si se cancela o se produce un fallo antes de llegar al último checkpoint, no se hace un rollback de las instancias ya reemplazadas.</li>
+<li>Una vez terminado el proceso completo, hasta que las instancias no hayan terminado el 'warm up', no se actualiza el porcentaje.</li>
+</ul>
+</li>
+<li>El lifecycle es:<ul>
+<li><img alt="Refresh lifecycle" src="../imgs/asg/instance-refresh-high-level-flowchart-diagram.png" /></li>
+</ul>
+</li>
+<li>Los estados por los que pasa cuando se inicia el proceso son:</li>
+<li>Pending</li>
+<li>InProgress</li>
+<li>Successful, Failed, Cancelled, RollbackSuccessful, or RollbackFailed.</li>
+<li>La descripción de cada estado se detalla <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/check-status-instance-refresh.html#instance-refresh-statuses">aquí</a>.</li>
+<li>Es posible cancelar el proceso mientras esté en el estado *<em>InProgress</em>.<ul>
+<li>No hace un rollback de las instancias ya reemplazadas.</li>
+</ul>
+</li>
+<li>Es posible hacer un <strong>rollback</strong> si el proceso está en el estado *<em>InProgress</em>.<ul>
+<li>Se reemplazan las instancias ya reemplazadas usando la configuración que tenía.</li>
+<li>Hay dos maneras de hacer este proceso:<ul>
+<li><strong>Manual</strong><ul>
+<li>Nosotros iniciamos este proceso manualmente.</li>
+</ul>
+</li>
+<li><strong>Auto</strong><ul>
+<li>ASG realiza el proceso si el instance refresh falló o una alerta cambió al estado <strong>ALARM</strong>.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>No es posible usar esta funcionalidad cuando:<ul>
+<li>Cuando se hizo el instance refresh no se configuró el <strong>desired configuration</strong>.</li>
+<li>La versión del launch template es <strong>$Latest</strong> o <strong>$Default</strong>.</li>
+<li>Si se usa Parameter Store.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="hooks">Hooks<a class="headerlink" href="#hooks" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Permite diseñar lógica ante los siguientes eventos:<ul>
+<li>Launching</li>
+<li>Terminating</li>
+</ul>
+</li>
+<li>Por defecto, se dispone de 1 hora para que el hook termine y la instancia transite al siguiente estado.</li>
+<li>El ciclo de vida de ASG es:
+    <img alt="ASG Lifecycle" src="../imgs/asg/auto-scaling-instance-lifecycle.png" /></li>
+<li>El resultado del puede ser: continue o abandon.<ul>
+<li>Abandon causará que se reemplace la instancia.</li>
+</ul>
+</li>
+<li>En caso de no publica el resultado del hook, el estado se especificará por el valor por defecto establecido en el ASG.</li>
+<li>Hay un rate limit que verifica si los hooks de creación están fallando constantemente.</li>
+<li>Hay ciertas opciones sólo disponibles vía CLI y SDK cuando se crea o actualiza un hook.</li>
+<li>Es posible usar distintos roles o notification targets usando eventos <a href="https://docs.aws.amazon.com/autoscaling/ec2/APIReference/API_PutLifecycleHook.html">PutLifecycleHook</a> por separado.</li>
+<li>ASG y <strong>Warm pool</strong> tienen sus propios hooks.</li>
+<li>
+<p>Funcionamiento de los hooks:</p>
+<ul>
+<li>A través del <strong>user data</strong> se realizan los hooks de tipo 'launching'.</li>
+<li>Es necesario hacer una llamada a <a href="https://docs.aws.amazon.com/autoscaling/ec2/APIReference/API_CompleteLifecycleAction.html">CompleteLifecycleAction</a> para notificar al ASG que el lifecycle se ha completado.</li>
+<li>Podemos añadir hasta un total de 50 hooks en un ASG.</li>
+<li>Para añadir un hook desde la consola, tendremos que hacerlo con el ASG ya creado, mientras que vía CLI o SDK podremos hacerlo mientras creamos el ASG.</li>
+<li>Podemos configurar un notification target que sea: SNS o SQS durante la creación del propio hook vía CLI o SDK.</li>
+<li>Si quieres usar servicios de AWS como Lambda para nuestros custom actions, tenemos que crear una regla en Amazon EventBridge, teniendo a la función Lambda como target.</li>
+<li>Si queremos ejecutar acciones en determinados lifecycle, tenemos que usar la metadata de la instancia.</li>
+</ul>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nv">TOKEN</span><span class="o">=</span><span class="sb">`</span>curl<span class="w"> </span>-X<span class="w"> </span>PUT<span class="w"> </span><span class="s2">&quot;http://169.254.169.254/latest/api/token&quot;</span><span class="w"> </span>-H<span class="w"> </span><span class="s2">&quot;X-aws-ec2-metadata-token-ttl-seconds: 21600&quot;</span><span class="sb">`</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="o">&amp;&amp;</span><span class="w"> </span>curl<span class="w"> </span>-H<span class="w"> </span><span class="s2">&quot;X-aws-ec2-metadata-token: </span><span class="nv">$TOKEN</span><span class="s2">&quot;</span><span class="w"> </span>-v<span class="w"> </span>http://169.254.169.254/latest/meta-data/autoscaling/target-lifecycle-state
+</code></pre></div>
+<ul>
+<li>Es posible extender el tiempo del heartbeat usando <a href="https://awscli.amazonaws.com/v2/documentation/api/latest/reference/autoscaling/record-lifecycle-action-heartbeat.html">record-lifecycle-action-heartbeat</a> desde la CLI.</li>
+<li>Lo que hace es reiniciar el contador, por lo que si nuestro valor era 60 minutos y hemos consumido 30, se convertirán en 90.</li>
+</ul>
+</li>
+</ul>
+<h2 id="asg-con-mixed-instances-group">ASG con Mixed instances group<a class="headerlink" href="#asg-con-mixed-instances-group" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Hay dos opciones:<ul>
+<li><strong>Attribute-based instance type-selection</strong><ul>
+<li>En lugar de tener que seleccionar nosotros manualmente el tipo de instancias que pueden desplegarse, le dejamos que sea el propio ASG quien las seleccione.</li>
+<li>La selección la hace en función de los <a href="https://docs.aws.amazon.com/autoscaling/ec2/APIReference/API_InstanceRequirements.html">estos atributos</a> especificados en el ASG. Algunos ejemplos:<ul>
+<li><strong>vCPU</strong>: Mínimo y máximo de vCPU por instancia.</li>
+<li><strong>RAM</strong>: Mínimo y máximo de RAM por instancia.</li>
+</ul>
+</li>
+<li>Es posible establecer el <strong>desired capacity</strong> al número de vCPU o RAM, lo que lo hace una alternativa al <strong>instance weights</strong>.</li>
+<li>Es posible habilitar un <code>price protection</code> para evitar que ASG levante instancias muy caras.<ul>
+<li>Está habilitado por defecto.</li>
+<li>La protección para on-demand y Spot se deben configurar por separado.</li>
+</ul>
+</li>
+<li>Es posible usar <code>performance protection</code> para que ASG tenga una referencia del tipo de instancia que tenga que elegir, es decir, que debería ser similar o mejor a nivel de rendimiento.<ul>
+<li>Sólo soporte por el momento rendimiento a nivel de CPU.</li>
+</ul>
+</li>
+<li>Es posible hacer una preview del tipo de instancias que harían match con los atributos y funcionalidades establecidas.</li>
+</ul>
+</li>
+<li><strong>Manual instance type-selection</strong><ul>
+<li>Somos nosotros quien elegimos los tipos de instancias que podrá desplegar el ASG.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Permite que el ASG pueda desplegar otro tipo de instancias en caso de que en las AZs en cuestión no haya suficiente instance capacity (Spot instances).<ul>
+<li>Lo que haría el ASG sería levantar instancias on-demand para satisfacer los requisitos de la aplicación.</li>
+<li>Es recomendable tener al menos 10 tipos distintos y no centrarse únicamente en instancias de última generación (Spot instances).</li>
+</ul>
+</li>
+<li>Por defecto usa on-demand instances, aunque es posible definir el porcentaje de instancias on-demand y spot.</li>
+<li>Es posible configurar distintos launch templates, aunque sólo es posible hacerlo vía CLI o SDK.</li>
+<li><a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/allocation-strategies.html#spot-allocation-strategy">Aquí</a> se explican las distintas estrategias para los dos tipos (on-demand y spot).</li>
+<li><code>Instance weights</code><ul>
+<li>Es posible indicar un valor/peso para cada tipo de instancia definida.</li>
+<li>La diferencia de peso entre el tipo de instancias no debería extremo.</li>
+<li>Es preferible usar <strong>desired capacity in units</strong> y no instancias.</li>
+<li>Deberemos de configurar nuestros <strong>desired capacity</strong> para que sean 2 o 3 veces más grandes que nuestra mayor peso.</li>
+</ul>
+</li>
+<li><code>Capacity Rebalancing</code><ul>
+<li>ASG tratará de mantener una disponibilidad en nuestro workload creando nuevas instancias de tipo Spot antes de que las existentes sean interrumpidas.</li>
+<li>ASG monitoriza monitoriza y responde ante cambios (rebalance recommendation) que puedan afectar a la disponibilidad de las instancias de tipo Spot.</li>
+<li>En caso de no usar esta funcionalidad, ASG reemplazará las instancias una vez han sido interrumpidas, afectando a la capacidad del servicio.</li>
+<li>Si se recibe un rebalance recommendation, ASG lanzará una nueva instancia <strong>si</strong> la nueva instancia provee de la misma o mejor disponibilidad que la actual.</li>
+</ul>
+</li>
+</ul>
+<h2 id="spot-instances">Spot instances<a class="headerlink" href="#spot-instances" title="Permanent link">&para;</a></h2>
+<ul>
+<li>TODO:<ul>
+<li>https://docs.aws.amazon.com/autoscaling/ec2/userguide/launch-template-spot-instances.html</li>
+<li>https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/spot-best-practices.html</li>
+</ul>
+</li>
+<li>Es altamente recomendable no usar el precio máximo, dado que es posible que no se puedan desplegar instancias.</li>
+<li>Si no establecemos un máximo, el valor por defecto es el coste de On-demand.</li>
+<li>Es recomendable crear acciones custom cuando la instancia ha recibido la notificación de interrupción.<ul>
+<li>Crear un hook que permita apagar la aplicación de forma exitosa y no forzosa.</li>
+<li>Se podría crear un script de apagado que obtenga el estado de la instancia para que por ejemplo; subir logs a S3, desuscribirse de algún servicio, etc.</li>
+<li>Es posible usar Amazon EventBridge para realizar las fuera de la instancia.</li>
+</ul>
+</li>
+<li>Es crítico diseñas las acciones custom para que terminen antes de 2 minutos, que es el tiempo que tarda Amazon en notificar la interrupción de la instancia.<ul>
+<li>Hay veces que la interrupción se produce en el mismo momento que se recibe la notificación.</li>
+</ul>
+</li>
+<li>Cuando menor sea el precio establecido, mayor es la posibilidad de interrupción.</li>
+<li>Recomendable usar la estrategia <code>price-capacity-optimized</code> en lugar de <code>lowest-price</code> para Spot instances.</li>
+<li>Es posible configurar integrar <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Fleets.html">fleets</a> de EC2 en el ASG.</li>
+</ul>
+<h2 id="instance-warmup">Instance warmup<a class="headerlink" href="#instance-warmup" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Proporciona más tiempo a una instancia en estado <strong>InService</strong> para iniciar antes de que se empiecen a registrar los datos de uso en CloudWatch metrics.</li>
+<li>No está habilitado por defecto.</li>
+<li>Es altamente recomendable configurar esta opción para evitar que las políticas de escalado no se disparen innecesariamente.</li>
+<li>Es especialmente recomendable si tenemos políticas de escalado del tipo: <strong>target tracking</strong> y <strong>step scaling</strong></li>
+<li>Al habilitar esta configuración, no tenemos que establecer el valor en:<ul>
+<li>Instance refresh.</li>
+<li>Target tracking scaling.</li>
+<li>Step scaling.</li>
+</ul>
+</li>
+</ul>
+<h2 id="warm-pool">Warm pool<a class="headerlink" href="#warm-pool" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Permite reducir la latencia de aplicaciones que tienen un periodo de inicio muy extenso.</li>
+<li>Pool de instancias pre-iniciadas que usa ASG cuando tiene que levantar nuevas instancias.</li>
+<li>Las instancias en este pool pueden estar en tres estados:<ul>
+<li>Running</li>
+<li>Stopped<ul>
+<li>Sólo le paga por la EIP y el EBS.</li>
+<li>El health check lo obtiene del volumen EBS.</li>
+</ul>
+</li>
+<li>Hibernated<ul>
+<li>Sólo se paga por la EIP, EBS y el almacenamiento de la RAM.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Hay estados adicionales para el pool:
+  <img alt="ASG warm pool lifecycle" src="../imgs/asg/warm-pools-lifecycle-diagram.png" /></li>
+<li>Es posible configurar hooks.</li>
+<li>Cuando una instancia es eliminada, se crea una nueva en el pool.</li>
+<li>Es posible mover una instancia que iba a ser eliminada al pool de nuevo mediante una <strong>reuse policy</strong>.<ul>
+<li>Sólo es posible configurar esta opción vía CI o SDK.</li>
+</ul>
+</li>
+<li>En caso de haber aplicado cambios en el launch template a nuestro pool existente, podremos hacer un refresh de la instancia.</li>
+<li>No podemos usar esta funcionalidad con:<ul>
+<li>ASG que tengan distintos tipos de instancias.</li>
+<li>Si el launch template tiene Spot instances.</li>
+<li>Si se usa Parameter Store para obtener el ID de la AMI.</li>
+</ul>
+</li>
+<li>Las instancias en este pool tienen sus propios hooks independientes a los nuestros.</li>
+</ul>
+<h2 id="integracion-elb">Integración ELB<a class="headerlink" href="#integracion-elb" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Se asocia el ELB al ASG.</li>
+<li>No es necesario registrar instancias EC2, sino que será el propio ASG quien cree o termine las instancias según la demanda.</li>
+<li>Es posible crear una política de escalado basado en las métricas del ELB.</li>
+<li>Es posible integrar los health checks del ELB al ASG para determinar y reemplazar instancias unhealthy.<ul>
+<li>Por defecto, no se consideran los health checks del ELB.</li>
+</ul>
+</li>
+<li>El target group del ELB debe ser de tipo <code>instance</code>.</li>
+<li>Si tenemos bootstrapping scripts que requiere cierto tiempo en ejecutarse, opcionalmente podemos crear un lifecycle hook al ASG de modo que haya un delay a la hora de registrar la instancia al ELB.</li>
+</ul>
+<h2 id="politicas-de-escalado">Políticas de escalado<a class="headerlink" href="#politicas-de-escalado" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Por defecto no hay ninguna política de escalado definida.</li>
+<li>Es recomendable usar políticas <strong>step scaling</strong> o <strong>target tracking</strong> en lugar de <strong>simple scaling</strong> para el tipo de escalado <strong>scale based on demand</strong>.</li>
+<li>El tipo de política recomendable es <strong>target tracking</strong> el tipo de escalado <strong>scale based on demand</strong>.</li>
+<li>Si las métricas de la aplicación se incrementa o reducen proporcionalmente, es recomendable usar <strong>target tracking</strong>.</li>
+<li>Es posible deshabilitar temporalmente una política de escalado.</li>
+<li>Al eliminar una política de escalado es posible que se requiera eliminar la alarma de CloudWatch manualmente.<ul>
+<li>El tipo <strong>target tracking</strong> las elimina automáticamente.</li>
+</ul>
+</li>
+<li>ASG provee de 5 maneras de escalar.</li>
+</ul>
+<h3 id="maintain-a-fixed-number-of-instances">Maintain a fixed number of instances<a class="headerlink" href="#maintain-a-fixed-number-of-instances" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Se define el número de instancias que siempre deberá de haber activas.</li>
+<li>Este es el método por defecto, es decir, ausencia de políticas.</li>
+<li>Se usan health checks para detectar su estado.</li>
+<li>Si el estado es unhealthy, terminará la instancia y lanzará una nueva.</li>
+</ul>
+<h3 id="scale-manually">Scale manually<a class="headerlink" href="#scale-manually" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Es la opción más básica.</li>
+<li>Se define manualmente el valor del <strong>desired capacity</strong> del ASG o se terminan las instancias.</li>
+<li>Amazon se encargará de levantar o terminar las instancias.</li>
+<li>Es posible desescalar manualmente el ASG eliminando una instancia concreta desde la <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/ec2-auto-scaling-scaling-manually.html">CLI</a>.</li>
+</ul>
+<h3 id="scale-based-on-schedule">Scale based on schedule<a class="headerlink" href="#scale-based-on-schedule" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Se realiza el escalado basado en una programación del día y la hora, para que sea recurrente o esporádico - inicio y fin -.</li>
+<li>Útil en casuísticas con carga predecible.</li>
+<li>Es posible combinar este tipo de política con el resto de políticas de escalado.</li>
+</ul>
+<h3 id="scale-based-on-demand-dynamic">Scale based on demand (dynamic)<a class="headerlink" href="#scale-based-on-demand-dynamic" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Es la opción más popular y avanzada.</li>
+<li>Mediante políticas de escalado personalizadas podemos definir los parámetros de control el escalado.</li>
+<li>Un ejemplo típico es escalar una instancia cuando la CPU está por encima del 70%.</li>
+<li>Las acciones a realizar por la política se disparan cuando una alerta está en estado <code>ALARM</code>.</li>
+<li>Las métricas que se usan son las que tienen una aggregation de todas las instancias que conforman el ASG.</li>
+<li>Nunca se escalará por encima del máximo definido a excepción de si se usa <strong>instance weights</strong>.</li>
+<li>El capacity a escalar se mide en una de las siguientes maneras:<ol>
+<li>Desired capacity.</li>
+<li>Capacity units (instance weights).</li>
+</ol>
+</li>
+<li>En caso de que varias políticas activen el escalado a la vez, Auto Scaling eligirá la política que proporcione mayor capacidad de escalado ascendente (out) o descendiente (in).</li>
+<li>Es posible definir múltiples políticas de tipo <strong>target tracking</strong> y <strong>step</strong>, además de <strong>schedule</strong>.</li>
+<li>Hay varios tipos de políticas que podemos definir:<ul>
+<li><strong>Target tracking scaling</strong><ul>
+<li>Opción recomendada.</li>
+<li>Escala en base al valor de una métrica de CloudWatch.</li>
+<li>Aumenta o disminuye la capacidad actual del grupo en función en un valor de destino especificado en una determinada métrica.</li>
+<li>Se recomienda cuando se aumente o disminuya en proporción al número de instancias de un grupo.</li>
+<li>Cuando la métrica esté por encima del valor de destino, se realizará un escalado ascendente, pero no al revés.</li>
+<li>Se pueden tener múltiples políticas siempre y cuando usen métricas diferentes.</li>
+<li>En caso de haber múltiples políticas:</li>
+<li>El escalado ascendente sucederá si cualquier de ellas está lista para escalar.</li>
+<li>El escalado descendente requiere que todas las políticas estén listas para desescalar.</li>
+<li>Es posible usar otro tipo de políticas para el escalado descendentes.</li>
+<li>No se debe modificar ni eliminar las alarmas de CloudWatch configuradas para este tipo de políticas.</li>
+<li>Hay 4 métricas disponibles por defecto (1 de CPU, 2 de Network y 1 de ALB) para este tipo de políticas.</li>
+<li>Se requiere de CLI o SDK para crear políticas con métricas personalizadas.</li>
+<li>Durante el escalado ascendente, la instancia en curso no cuenta como capacidad actual.</li>
+<li>Durante el escalado descendente, la instancia que está siendo terminada cuenta como capacidad actual.</li>
+<li>No es posible hacer un escalado descendente mientras hay otra actividad de escalado ascendente en curso.</li>
+<li>Si la máetrica tiene como estado <code>INSUFFICIENT_DATA</code>, ASG no escalará hasta que la métricas reciba datos.</li>
+<li>A la hora de seleccionar una métrica, ésta debe mostrar un valor que se vaya modificando según la utilización a nivel de ASG.</li>
+<li>Por ejemplo, usar la métrica <code>RequestCount</code> del ELB no sirve porque el valor no tiene nada que ver con el ASG. Es decir, por más recursos que tenga nuestro ASG esa métrica no se verá afectada.</li>
+<li>Es posible usar <code>metric math</code> para consultar múltiples métricas y mediante expresiones matemáticas crear nuevos <code>time series</code>. <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/ec2-auto-scaling-target-tracking-metric-math.html">Aquí</a> se explica con más detalle.</li>
+</ul>
+</li>
+<li><strong>Step scaling</strong><ul>
+<li>Aumenta o disminuye la capacidad actual en función de una serie de ajustes de escalado.</li>
+<li>Varian en función del tamaño de la interrupción de la alarma.</li>
+<li>Por ejemplo, si la alerta está al 60%, se escalan 10, al 70% 20 y al 80% 30 instancias.</li>
+<li>Desde la consola el valor es absoluto mientras que desde la CLI o SDK es relativo.</li>
+<li>Hay que evitar que el valor de las métricas se solapen.</li>
+<li>Hay varios tipos de ajustes a definir para optimizar el escalado (también válidos para <strong>simple scaling</strong>):</li>
+<li><strong>ChangeInCapacity</strong><ul>
+<li>Incrementa o reduce el <strong>capacity</strong> según un valor específico.</li>
+<li>Había 3 instancia, salta la alerta, la cual define 5 instancias, el valor del capacity será 8.</li>
+</ul>
+</li>
+<li><strong>ExactCapacity</strong><ul>
+<li>Cambia el <strong>capacity</strong> a un valor concreto.</li>
+<li>Había 3 instancia, salta la alerta, la cual define 5 instancias, el valor del capacity será 5.</li>
+</ul>
+</li>
+<li><strong>PercentChangeInCapacity</strong><ul>
+<li>Incrementa o reduce el <strong>capacity</strong> según un porcentaje.</li>
+<li>Es posible indicar un mínimo de instancias a escalar.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>Simple scaling</strong><ul>
+<li>Es igual que <strong>step scaling</strong> a exepción de que el estado <code>in-progress</code> o los health checks debe de completarse y que además, debe completarse el <code>cooldown period</code> antes de que responda a más alertas.</li>
+<li>Se recomienda usar <strong>step scaling</strong>, dado que es un tipo de política más moderna.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="use-predictive-scaling">Use predictive scaling<a class="headerlink" href="#use-predictive-scaling" title="Permanent link">&para;</a></h3>
+<ul>
+<li>ASG es trata de predecir cuando debe escalar.</li>
+<li>Se basa en anteriores acciones para realizar la predicción.</li>
+<li>Es posible combinarlo con el tipo <strong>scale based on demand</strong>.</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.tracking", "navigation.tabs", "navigation.sections", "navigation.expand", "navigation.indexes", "toc.integrate", "content.code.copy", "content.code.annotate", "navigation.top"], "search": "../../assets/javascripts/workers/search.f8cc74c7.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.f1b6f286.min.js"></script>
+      
+    
+  </body>
+</html>
