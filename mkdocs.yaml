@@ -11,10 +11,11 @@ docs_dir: 'docs/'
 site_dir: 'generated/'
 
 nav:
-  - Home: 'home.md'
-  - Apuntes AWS:
-    - Lambda: 'aws/lambda.md'
-  - About me: 'about.md'
+  #- Apuntes AWS:
+  - Home: 'index.md'
+  - Lambda: 'aws/lambda.md'
+  - API Gateway: 'aws/api-gateway.md'
+  - Auto Scaling Group: 'aws/asg.md'
 
 ## https://squidfunk.github.io/mkdocs-material/reference/code-blocks/#configuration
 

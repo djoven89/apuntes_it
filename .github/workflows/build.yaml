@@ -1,0 +1,29 @@
+name: Checking the build process
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Getting the repository code
+        uses: actions/checkout@v4
+
+      - name: Setting up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.9
+
+      - name: Installing dependencies
+        run: |
+          pip install -r requirements.txt
+
+      - name: Build the documentation
+        run: |
+          mkdocs build
